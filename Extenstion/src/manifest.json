@@ -1,0 +1,16 @@
+{
+    "manifest_version": 2,
+    "name": "Flatpak URL Changer",
+    "version": "1.0",
+    "description": "This extension changes specific URLs",
+    "permissions": ["webRequest", "*://*/*"],
+    "content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": ["content.js"]
+      }
+    ],
+    "browser_action": {
+      "default_popup": "popup/popup.html"
+    }
+  }

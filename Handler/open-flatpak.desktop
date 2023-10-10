@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=open-flatpak
+GenericName=Opener Flatpak Refs
+Type=Application
+Exec=open-flatpak %u
+X-AppImage-Integrate=false
+MimeType=x-scheme-handler/flatpak;x-scheme-handler/flatpak+https;

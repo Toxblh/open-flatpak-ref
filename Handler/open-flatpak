@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# Thanks to original suggestion - https://github.com/flathub/website/issues/919#issuecomment-1400872182
+
+function urldecode() { : "${*//+/ }"; echo -e "${_//%/\\x}"; }
+
+# Если это ссылка на flatpak ref, оставляем оригинальную логику
+if  [[ $1 == *.flatpakref ]] ;
+then
+     if [[ $1 == flatpak://* ]] ;
+    then
+        # flatpak:// -> https://
+        url="https://$(urldecode "${1:10}")"
+    else
+        # flatpak+https:// -> https://
+        url=$(urldecode "${1:8}")
+    fi
+else
+    # Реагируем только если это префикс flatpak:// или flatpak+https://
+    if [[ $1 == flatpak://* ]] ;
+    then
+        # flatpak:// -> https://dl.flathub.org/repo/appstream/ -> .flatpakref
+        url="https://dl.flathub.org/repo/appstream/$(urldecode "${1:10}").flatpakref"
+    elif [[ $1 == flatpak+https://* ]] ;
+    then
+        # flatpak+https:// -> https://dl.flathub.org/repo/appstream/ -> .flatpakref
+        url="https://dl.flathub.org/repo/appstream/$(urldecode "${1:16}").flatpakref"
+    else
+        exit 1
+    fi
+fi
+
+tempfile=$(mktemp --suffix .flatpakref)
+
+curl $url > $tempfile
+
+xdg-open $tempfile
